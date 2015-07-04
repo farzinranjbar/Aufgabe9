@@ -21,41 +21,47 @@ public class Eurobetrag implements Geldbetrag
     public static Eurobetrag valueOf(String geldbetrag)
             throws IllegalArgumentException
     {
-        //TODO den Ausdruck in der unteren Zeile erweitern
-        if (geldbetrag.matches(".*[a-zA-Z]+.*"))
+       // Prüft, ob die Eingabe nur unserem regulären Ausdruck entspricht, wenn nicht
+       // dann wirft er IllegalArgumentException raus.
+        
+        Matcher matcher = GELDBETRAG.matcher(geldbetrag);
+        if (!matcher.matches())
         {
             throw new IllegalArgumentException(
                     "Der String ist kein gültiger Geldbetrag");
         }
-
+        
+        // Falls die EIngabe unserem regulären Ausdruck entspricht
+        // wird es von String in Eurobetrag umgewndelt!
+        
         int centbetrag;
         
-        Matcher matcher = GELDBETRAG.matcher(geldbetrag);
-        if (matcher.find())
+        Matcher matcher2 = GELDBETRAG.matcher(geldbetrag);
+        if (matcher2.find())
         {
-            if ("".equals(matcher.group(4)) || matcher.group(4) == null)
+            if ("".equals(matcher2.group(4)) || matcher2.group(4) == null)
             {
-                centbetrag = Integer.valueOf(matcher.group(1)) * 100;
+                centbetrag = Integer.valueOf(matcher2.group(1)) * 100;
             }
             else
             {
-                if (matcher.group(4)
+                if (matcher2.group(4)
                     .length() < 2)
-                    centbetrag = Integer.valueOf(matcher.group(1)) * 100
-                            + Integer.valueOf(matcher.group(4)) * 10;
+                    centbetrag = Integer.valueOf(matcher2.group(1)) * 100
+                            + Integer.valueOf(matcher2.group(4)) * 10;
                 else
                 {
-                    centbetrag = Integer.valueOf(matcher.group(1)) * 100
-                            + Integer.valueOf(matcher.group(4));
+                    centbetrag = Integer.valueOf(matcher2.group(1)) * 100
+                            + Integer.valueOf(matcher2.group(4));
                 }
             }
+            return new Eurobetrag(centbetrag);
         }
         else
         {
             throw new IllegalArgumentException(
                     "Der String ist kein gültiger Geldbetrag");
         }
-        return new Eurobetrag(centbetrag);
     }
 
     /**
