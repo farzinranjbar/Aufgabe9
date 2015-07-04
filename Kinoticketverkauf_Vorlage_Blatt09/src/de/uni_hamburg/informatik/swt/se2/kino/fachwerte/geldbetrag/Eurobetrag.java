@@ -21,6 +21,7 @@ public class Eurobetrag implements Geldbetrag
     public static Eurobetrag valueOf(String geldbetrag)
             throws IllegalArgumentException
     {
+        //TODO den Ausdruck in der unteren Zeile erweitern
         if (geldbetrag.matches(".*[a-zA-Z]+.*"))
         {
             throw new IllegalArgumentException(
