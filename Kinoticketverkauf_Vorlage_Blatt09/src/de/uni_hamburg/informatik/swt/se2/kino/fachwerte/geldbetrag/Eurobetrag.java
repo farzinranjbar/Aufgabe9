@@ -21,46 +21,46 @@ public class Eurobetrag implements Geldbetrag
     public static Eurobetrag valueOf(String geldbetrag)
             throws IllegalArgumentException
     {
-       // Prüft, ob die Eingabe nur unserem regulären Ausdruck entspricht, wenn nicht
-       // dann wirft er IllegalArgumentException raus.
-        
+        // Prüft, ob die Eingabe nur unserem regulären Ausdruck entspricht, wenn nicht
+        // dann wirft er IllegalArgumentException raus.
+
         Matcher matcher = GELDBETRAG.matcher(geldbetrag);
         if (!matcher.matches())
         {
             throw new IllegalArgumentException(
                     "Der String ist kein gültiger Geldbetrag");
         }
-        
-        // Falls die EIngabe unserem regulären Ausdruck entspricht
-        // wird es von String in Eurobetrag umgewndelt!
-        
-        int centbetrag;
-        
-        Matcher matcher2 = GELDBETRAG.matcher(geldbetrag);
-        if (matcher2.find())
+        else
         {
-            if ("".equals(matcher2.group(4)) || matcher2.group(4) == null)
+            // Wandelt, da die Eingabe unserem regulären Ausdruck entspricht
+            // Diese von String in Eurobetrag um!
+            int centbetrag;
+            Matcher matcher2 = GELDBETRAG.matcher(geldbetrag);
+            if (matcher2.find())
             {
-                centbetrag = Integer.valueOf(matcher2.group(1)) * 100;
+                if ("".equals(matcher2.group(4)) || matcher2.group(4) == null)
+                {
+                    centbetrag = Integer.valueOf(matcher2.group(1)) * 100;
+                }
+                else
+                {
+                    if (matcher2.group(4)
+                        .length() < 2)
+                        centbetrag = Integer.valueOf(matcher2.group(1)) * 100
+                                + Integer.valueOf(matcher2.group(4)) * 10;
+                    else
+                    {
+                        centbetrag = Integer.valueOf(matcher2.group(1)) * 100
+                                + Integer.valueOf(matcher2.group(4));
+                    }
+                }
+                return new Eurobetrag(centbetrag);
             }
             else
             {
-                if (matcher2.group(4)
-                    .length() < 2)
-                    centbetrag = Integer.valueOf(matcher2.group(1)) * 100
-                            + Integer.valueOf(matcher2.group(4)) * 10;
-                else
-                {
-                    centbetrag = Integer.valueOf(matcher2.group(1)) * 100
-                            + Integer.valueOf(matcher2.group(4));
-                }
+                throw new IllegalArgumentException(
+                        "Der String ist kein gültiger Geldbetrag");
             }
-            return new Eurobetrag(centbetrag);
-        }
-        else
-        {
-            throw new IllegalArgumentException(
-                    "Der String ist kein gültiger Geldbetrag");
         }
     }
 
@@ -142,16 +142,15 @@ public class Eurobetrag implements Geldbetrag
                 return _centbetrag / 100 + "," + centTeil;
             }
         }
-
         else
         {
             if (centTeil2 < 10)
             {
-                return _centbetrag / 100 + ",0" + centTeil2;
+                return "-" + (_centbetrag / 100)*-1 + ",0" + centTeil2;
             }
             else
             {
-                return _centbetrag / 100 + "," + centTeil2;
+                return "-" + (_centbetrag / 100)*-1 + "," + centTeil2;
             }
         }
     }
