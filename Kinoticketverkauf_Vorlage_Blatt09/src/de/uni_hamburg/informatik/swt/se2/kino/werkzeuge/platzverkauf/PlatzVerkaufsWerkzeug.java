@@ -97,7 +97,6 @@ public class PlatzVerkaufsWerkzeug
      */
     private void fuehreBarzahlungDurch()
     {
-        // TODO für Blatt 8: Verkaufen ohne Barzahlungswerkzeug
         _barzahlungsWerkzeug.fuehreBarzahlungDurch(_ausgewaehlterGesamtbetrag);
         if (_barzahlungsWerkzeug.barzahlungErfolgreich())
         {
