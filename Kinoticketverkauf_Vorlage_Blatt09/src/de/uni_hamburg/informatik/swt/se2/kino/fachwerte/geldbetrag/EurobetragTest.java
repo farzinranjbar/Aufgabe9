@@ -12,11 +12,11 @@ public class EurobetragTest
     @Test
     public void konvertierungsTest()
     {
-        Geldbetrag zehnKommaDreiEuro = Eurobetrag.valueOf(1003);
-        Geldbetrag nullKommaZweiUndFünfzigEuro = Eurobetrag.valueOf(52);
-        Geldbetrag ZehnKommaFünfUndFünfzigEuro = Eurobetrag.valueOf(1055);
-        Geldbetrag neunKommaEinUndFünfzigEuro = Eurobetrag.valueOf(951);
-        Geldbetrag einsKommaVierEuro = Eurobetrag.valueOf(104);
+        Eurobetrag zehnKommaDreiEuro = Eurobetrag.valueOf(1003);
+        Eurobetrag nullKommaZweiUndFünfzigEuro = Eurobetrag.valueOf(52);
+        Eurobetrag ZehnKommaFünfUndFünfzigEuro = Eurobetrag.valueOf(1055);
+        Eurobetrag neunKommaEinUndFünfzigEuro = Eurobetrag.valueOf(951);
+        Eurobetrag einsKommaVierEuro = Eurobetrag.valueOf(104);
         
         /**
          * Prüfe die valueOf Methoden mit String, Integer & int als 
@@ -69,7 +69,7 @@ public class EurobetragTest
         /**
          * Teste, ob die Hashcode gut generiert wird!
          */
-        Set<Geldbetrag> sammlung = new HashSet<Geldbetrag>(); 
+        Set<Eurobetrag> sammlung = new HashSet<Eurobetrag>(); 
         sammlung.add(Eurobetrag.valueOf(192));
         assertTrue(sammlung.contains(Eurobetrag.valueOf(192)));
         assertFalse(sammlung.contains(Eurobetrag.valueOf(191)));

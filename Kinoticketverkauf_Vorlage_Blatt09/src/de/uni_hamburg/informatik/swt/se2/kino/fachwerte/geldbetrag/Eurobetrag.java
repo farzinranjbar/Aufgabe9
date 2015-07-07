@@ -3,7 +3,7 @@ package de.uni_hamburg.informatik.swt.se2.kino.fachwerte.geldbetrag;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Eurobetrag implements Geldbetrag
+public class Eurobetrag
 {
     private static final Pattern GELDBETRAG = Pattern.compile("((\\d){1,7})(,((\\d){0,2})){0,1}");
     private final int _centbetrag;
@@ -23,44 +23,34 @@ public class Eurobetrag implements Geldbetrag
     {
         // Prüft, ob die Eingabe nur unserem regulären Ausdruck entspricht, wenn nicht
         // dann wirft er IllegalArgumentException raus.
-
         Matcher matcher = GELDBETRAG.matcher(geldbetrag);
-        if (!matcher.matches())
-        {
-            throw new IllegalArgumentException(
-                    "Der String ist kein gültiger Geldbetrag");
-        }
-        else
+        if (matcher.matches())
         {
             // Wandelt, da die Eingabe unserem regulären Ausdruck entspricht
             // Diese von String in Eurobetrag um!
             int centbetrag;
-            Matcher matcher2 = GELDBETRAG.matcher(geldbetrag);
-            if (matcher2.find())
+            if ("".equals(matcher.group(4)) || matcher.group(4) == null)
             {
-                if ("".equals(matcher2.group(4)) || matcher2.group(4) == null)
-                {
-                    centbetrag = Integer.valueOf(matcher2.group(1)) * 100;
-                }
-                else
-                {
-                    if (matcher2.group(4)
-                        .length() < 2)
-                        centbetrag = Integer.valueOf(matcher2.group(1)) * 100
-                                + Integer.valueOf(matcher2.group(4)) * 10;
-                    else
-                    {
-                        centbetrag = Integer.valueOf(matcher2.group(1)) * 100
-                                + Integer.valueOf(matcher2.group(4));
-                    }
-                }
-                return new Eurobetrag(centbetrag);
+                centbetrag = Integer.valueOf(matcher.group(1)) * 100;
             }
             else
             {
-                throw new IllegalArgumentException(
-                        "Der String ist kein gültiger Geldbetrag");
+                if (matcher.group(4)
+                    .length() < 2)
+                    centbetrag = Integer.valueOf(matcher.group(1)) * 100
+                            + Integer.valueOf(matcher.group(4)) * 10;
+                else
+                {
+                    centbetrag = Integer.valueOf(matcher.group(1)) * 100
+                            + Integer.valueOf(matcher.group(4));
+                }
             }
+            return new Eurobetrag(centbetrag);
+        }
+        else
+        {
+            throw new IllegalArgumentException(
+                    "Der String ist kein gültiger Geldbetrag");
         }
     }
 
@@ -84,34 +74,16 @@ public class Eurobetrag implements Geldbetrag
         return new Eurobetrag(geldbetrag);
     }
 
-    @Override
-    public Eurobetrag plus(Geldbetrag obj) throws IllegalArgumentException
+    public Eurobetrag plus(Eurobetrag obj)
     {
-        if (obj instanceof Eurobetrag)
-        {
-            Eurobetrag that = (Eurobetrag) obj;
-            return valueOf(this._centbetrag + that._centbetrag);
-        }
-        else
-        {
-            throw new IllegalArgumentException(
-                    "Der Parameter muss zuerst in einen Eurobetrag umgewandelt werden");
-        }
+        Eurobetrag that = obj;
+        return valueOf(this._centbetrag + that._centbetrag);
     }
 
-    @Override
-    public Eurobetrag minus(Geldbetrag obj)
+    public Eurobetrag minus(Eurobetrag obj)
     {
-        if (obj instanceof Eurobetrag)
-        {
-            Eurobetrag that = (Eurobetrag) obj;
-            return valueOf(this._centbetrag - that._centbetrag);
-        }
-        else
-        {
-            throw new IllegalArgumentException(
-                    "Der Parameter muss zuerst in einen Eurobetrag umgewandelt werden");
-        }
+        Eurobetrag that = obj;
+        return valueOf(this._centbetrag - that._centbetrag);
     }
 
     public int getCentbetrag()
@@ -119,7 +91,6 @@ public class Eurobetrag implements Geldbetrag
         return _centbetrag;
     }
 
-    @Override
     public Eurobetrag times(int factor)
     {
         return valueOf(this.getCentbetrag() * factor);
