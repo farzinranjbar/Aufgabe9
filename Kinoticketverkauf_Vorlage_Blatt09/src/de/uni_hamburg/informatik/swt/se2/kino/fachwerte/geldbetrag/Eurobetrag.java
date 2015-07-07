@@ -135,22 +135,22 @@ public class Eurobetrag implements Geldbetrag
         {
             if (centTeil < 10)
             {
-                return _centbetrag / 100 + ",0" + centTeil;
+                return _centbetrag / 100 + ",0" + centTeil + "€";
             }
             else
             {
-                return _centbetrag / 100 + "," + centTeil;
+                return _centbetrag / 100 + "," + centTeil + "€";
             }
         }
         else
         {
             if (centTeil2 < 10)
             {
-                return "-" + (_centbetrag / 100) * -1 + ",0" + centTeil2;
+                return "-" + (_centbetrag / 100) * -1 + ",0" + centTeil2 + "€";
             }
             else
             {
-                return "-" + (_centbetrag / 100) * -1 + "," + centTeil2;
+                return "-" + (_centbetrag / 100) * -1 + "," + centTeil2 + "€";
             }
         }
     }

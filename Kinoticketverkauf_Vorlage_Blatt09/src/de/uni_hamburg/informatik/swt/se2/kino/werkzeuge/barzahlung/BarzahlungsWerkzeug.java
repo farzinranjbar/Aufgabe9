@@ -263,7 +263,7 @@ public class BarzahlungsWerkzeug extends ObservableSubwerkzeug
     private void zeigeRestbetrag(Eurobetrag _preis2)
     {
         _ui.getRestbetragTextfield()
-            .setText(_preis2 + " Eurocent");
+            .setText(_preis2 + "");
     }
 
     /**
@@ -272,6 +272,6 @@ public class BarzahlungsWerkzeug extends ObservableSubwerkzeug
     private void zeigePreis()
     {
         _ui.getPreisTextfield()
-            .setText(_preis + " Eurocent");
+            .setText(_preis + "");
     }
 }

@@ -128,14 +128,14 @@ public class PlatzVerkaufsWerkzeug
             Eurobetrag betrag = _vorstellung.getPreisFuerPlaetze(plaetze);
             Eurobetrag preis = betrag;
             _ui.getPreisLabel().setText(
-                    "Gesamtpreis: " + preis + " Eurocent");
+                    "Gesamtpreis: " + preis);
             _ausgewaehlterGesamtbetrag = preis;
         }
         else if (istStornierenMoeglich(plaetze))
         {
             Eurobetrag preis = _vorstellung.getPreisFuerPlaetze(plaetze);
             _ui.getPreisLabel().setText(
-                    "Gesamtstorno: " + preis + " Eurocent");
+                    "Gesamtstorno: " + preis);
         }
         else if (!plaetze.isEmpty())
         {
@@ -145,7 +145,7 @@ public class PlatzVerkaufsWerkzeug
         else
         {
             _ui.getPreisLabel().setText(
-                    "Gesamtpreis: 0 Eurocent");
+                    "Gesamtpreis: 0€");
         }
     }
 
