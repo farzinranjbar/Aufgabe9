@@ -252,7 +252,7 @@ public class BarzahlungsWerkzeug extends ObservableSubwerkzeug
     private void zeigeFehlertext()
     {
         _ui.getRestbetragTextfield()
-            .setText(" Err ");
+            .setText(" Falsches Format ");
     }
 
     /**

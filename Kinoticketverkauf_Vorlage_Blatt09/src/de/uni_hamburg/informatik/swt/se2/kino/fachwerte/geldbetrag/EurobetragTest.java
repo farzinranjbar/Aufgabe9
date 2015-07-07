@@ -38,10 +38,13 @@ public class EurobetragTest
 
         try
         {
-            assertNotEquals(zehnKommaDreiEuro, Eurobetrag.valueOf("10,2"));
+            assertEquals(zehnKommaDreiEuro, Eurobetrag.valueOf("10,22"));
             fail("Ungültiger Parameter erzeugt einen gültigen Geldbetrag!");
         }
-        catch (IllegalArgumentException e)
+//        catch (IllegalArgumentException e)
+//        {
+//        }
+        catch (AssertionError b)
         {
         }
        

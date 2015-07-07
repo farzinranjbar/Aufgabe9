@@ -146,11 +146,11 @@ public class Eurobetrag implements Geldbetrag
         {
             if (centTeil2 < 10)
             {
-                return "-" + (_centbetrag / 100)*-1 + ",0" + centTeil2;
+                return "-" + (_centbetrag / 100) * -1 + ",0" + centTeil2;
             }
             else
             {
-                return "-" + (_centbetrag / 100)*-1 + "," + centTeil2;
+                return "-" + (_centbetrag / 100) * -1 + "," + centTeil2;
             }
         }
     }
