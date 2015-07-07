@@ -125,15 +125,15 @@ public class PlatzVerkaufsWerkzeug
         _ausgewaehlterGesamtbetrag = Eurobetrag.valueOf(0);
         if (istVerkaufenMoeglich(plaetze))
         {
-            int betrag = _vorstellung.getPreisFuerPlaetze(plaetze);
-            Eurobetrag preis = Eurobetrag.valueOf(betrag);
+            Eurobetrag betrag = _vorstellung.getPreisFuerPlaetze(plaetze);
+            Eurobetrag preis = betrag;
             _ui.getPreisLabel().setText(
                     "Gesamtpreis: " + preis + " Eurocent");
             _ausgewaehlterGesamtbetrag = preis;
         }
         else if (istStornierenMoeglich(plaetze))
         {
-            int preis = _vorstellung.getPreisFuerPlaetze(plaetze);
+            Eurobetrag preis = _vorstellung.getPreisFuerPlaetze(plaetze);
             _ui.getPreisLabel().setText(
                     "Gesamtstorno: " + preis + " Eurocent");
         }
