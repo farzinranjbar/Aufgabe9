@@ -31,247 +31,210 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.ObservableSubwerkzeug;
  * @author SE2-Team
  * @version SoSe 2015
  */
-public class BarzahlungsWerkzeug extends ObservableSubwerkzeug
-{
+public class BarzahlungsWerkzeug extends ObservableSubwerkzeug {
 
-    private BarzahlungsWerkzeugUI _ui;
-    private Eurobetrag _preis;
-    private boolean _barzahlungErfolgreich;
-    private boolean _ausreichenderGeldbetrag;
+	private BarzahlungsWerkzeugUI _ui;
+	private Eurobetrag _preis;
+	private boolean _barzahlungErfolgreich;
+	private boolean _ausreichenderGeldbetrag;
 
-    /**
-     * Initialisiert das Werkzeug. Die Aktivierung erfolgt über eine sparate
-     * Methode.
-     * 
-     */
-    public BarzahlungsWerkzeug()
-    {
-        _ui = new BarzahlungsWerkzeugUI();
-        registriereUIAktionen();
-    }
+	/**
+	 * Initialisiert das Werkzeug. Die Aktivierung erfolgt über eine sparate
+	 * Methode.
+	 * 
+	 */
+	public BarzahlungsWerkzeug() {
+		_ui = new BarzahlungsWerkzeugUI();
+		registriereUIAktionen();
+	}
 
-    /**
-     * Startet den Barzahlungsvorgang. Die UI wird angezeigt. Der Programmfluss
-     * kehrt erst nach dem Beenden des Bezahlvorgangs an den Aufrufer zurück.
-     * 
-     * @param preis der einzunehmende Gelbetrag
-     */
-    public void fuehreBarzahlungDurch(Eurobetrag preis)
-    {
-        _preis = preis;
-        _ausreichenderGeldbetrag = false;
-        _barzahlungErfolgreich = false;
-        setzeUIAnfangsstatus();
-        _ui.zeigeAn();
-    }
+	/**
+	 * Startet den Barzahlungsvorgang. Die UI wird angezeigt. Der Programmfluss
+	 * kehrt erst nach dem Beenden des Bezahlvorgangs an den Aufrufer zurück.
+	 * 
+	 * @param preis
+	 *            der einzunehmende Gelbetrag
+	 */
+	public void fuehreBarzahlungDurch(Eurobetrag preis) {
+		_preis = preis;
+		_ausreichenderGeldbetrag = false;
+		_barzahlungErfolgreich = false;
+		setzeUIAnfangsstatus();
+		_ui.zeigeAn();
+	}
 
-    /**
-     * @return true, wenn die Barzahlung erfolgreich durchgeführt wurde, sonst
-     *         false.
-     */
-    public boolean barzahlungErfolgreich()
-    {
-        return _barzahlungErfolgreich;
-    }
+	/**
+	 * @return true, wenn die Barzahlung erfolgreich durchgeführt wurde, sonst
+	 *         false.
+	 */
+	public boolean barzahlungErfolgreich() {
+		return _barzahlungErfolgreich;
+	}
 
-    /**
-     * Registiert alle Listener an den UI-Widgets
-     */
-    private void registriereUIAktionen()
-    {
-        registriereAbbrechenAktionen();
-        registriereOKAktion();
-        registriereGeyahltTextfieldEingabeAktion();
-    }
+	/**
+	 * Registiert alle Listener an den UI-Widgets
+	 */
+	private void registriereUIAktionen() {
+		registriereAbbrechenAktionen();
+		registriereOKAktion();
+		registriereGeyahltTextfieldEingabeAktion();
+	}
 
-    /**
-     * Registriert einen Listener, der auf den Abbrechen-Button reagiert
-     */
-    private void registriereAbbrechenAktionen()
-    {
-        _ui.getAbbrechenButton()
-            .addActionListener(new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    bezahlenNichtErfolgreich();
-                }
+	/**
+	 * Registriert einen Listener, der auf den Abbrechen-Button reagiert
+	 */
+	private void registriereAbbrechenAktionen() {
+		_ui.getAbbrechenButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bezahlenNichtErfolgreich();
+			}
 
-            });
-        _ui.getDialog()
-            .addWindowListener(new WindowAdapter()
-            {
-                @Override
-                public void windowClosed(WindowEvent e)
-                {
-                    bezahlenNichtErfolgreich();
-                }
-            });
-    }
+		});
+		_ui.getDialog().addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				bezahlenNichtErfolgreich();
+			}
+		});
+	}
 
-    /**
-     * Registriert einen Listener, der auf das Drücken des OK-Buttons alias
-     * "Verkaufen" reagiert.
-     */
-    private void registriereOKAktion()
-    {
-        _ui.getGeldErhaltenButton()
-            .addActionListener(new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    bezahlenErfolgreich();
-                }
-            });
-    }
+	/**
+	 * Registriert einen Listener, der auf das Drücken des OK-Buttons alias
+	 * "Verkaufen" reagiert.
+	 */
+	private void registriereOKAktion() {
+		_ui.getGeldErhaltenButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bezahlenErfolgreich();
+			}
+		});
+	}
 
-    /**
-     * Registriert einen Listener, der auf Änderungen im Gegeben-Textfeld
-     * reagiert.
-     */
-    private void registriereGeyahltTextfieldEingabeAktion()
-    {
-        _ui.getGezahltTextfield()
-            .addKeyListener(new KeyAdapter()
-            {
-                @Override
-                public void keyReleased(KeyEvent e)
-                {
-                    switch (e.getKeyCode())
-                    {
-                    case KeyEvent.VK_ESCAPE:
-                        bezahlenNichtErfolgreich();
-                        break;
-                    case KeyEvent.VK_ENTER:
-                        if (_ausreichenderGeldbetrag)
-                        {
-                            bezahlenErfolgreich();
-                        }
-                        break;
-                    default:
-                        reagiereAufEingabeText(_ui.getGezahltTextfield()
-                            .getText());
-                    }
-                }
-            });
-    }
+	/**
+	 * Registriert einen Listener, der auf Änderungen im Gegeben-Textfeld
+	 * reagiert.
+	 */
+	private void registriereGeyahltTextfieldEingabeAktion() {
+		_ui.getGezahltTextfield().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_ESCAPE:
+					bezahlenNichtErfolgreich();
+					break;
+				case KeyEvent.VK_ENTER:
+					if (_ausreichenderGeldbetrag) {
+						bezahlenErfolgreich();
+					}
+					break;
+				default:
+					reagiereAufEingabeText(_ui.getGezahltTextfield().getText());
+				}
+			}
+		});
+	}
 
-    /**
-     * Setzt einen neuen Status für das Werkzeug auf Basis der gesamten Eingabe
-     * und beendet das Bezahlen erfoglreich, sollte der Preis gedeckt und die
-     * Entertaste gedrückt worden sein. Die Esc-Taste beendet den Bezahlvorgang
-     * erfolglos.
-     * 
-     * @param eingabePreis der bisher eingegebene Preis
-     */
-    private void reagiereAufEingabeText(String eingabePreis)
-    {
-        if (eingabePreis.isEmpty())
-        {
-            eingabePreis = "0";
-        }
-        try
-        {
-            Eurobetrag eingabeBetrag = Eurobetrag.valueOf(eingabePreis);
-            _ausreichenderGeldbetrag = ((_preis.minus(eingabeBetrag)).getCentbetrag() < 0);
-            Eurobetrag differenz = _preis.minus(eingabeBetrag);
-            zeigeRestbetrag(differenz);
-        }
-        catch (NumberFormatException ignore)
-        {
-            _ausreichenderGeldbetrag = false;
-            zeigeFehlertext();
-        }
-        catch (IllegalArgumentException ignore)
-        {
-            _ausreichenderGeldbetrag = false;
-            zeigeFehlertext();
-        }
-        zeigeAusreichenderGeldbetragStatus();
-    }
+	/**
+	 * Setzt einen neuen Status für das Werkzeug auf Basis der gesamten Eingabe
+	 * und beendet das Bezahlen erfoglreich, sollte der Preis gedeckt und die
+	 * Entertaste gedrückt worden sein. Die Esc-Taste beendet den Bezahlvorgang
+	 * erfolglos.
+	 * 
+	 * @param eingabePreis
+	 *            der bisher eingegebene Preis
+	 */
+	private void reagiereAufEingabeText(String eingabePreis) {
+		if (eingabePreis.isEmpty()) {
+			eingabePreis = "0";
+		}
+		try {
+			Eurobetrag nullCent = Eurobetrag.valueOf(0);
+			Eurobetrag eingabeBetrag = Eurobetrag.valueOf(eingabePreis);
+			_ausreichenderGeldbetrag = ((_preis.minus(eingabeBetrag))
+					.compareTo(nullCent) >= 0);
+			Eurobetrag differenz = (_preis.minus(eingabeBetrag)).abs();
+			zeigeRestbetrag(differenz);
+		} catch (NumberFormatException ignore) {
+			_ausreichenderGeldbetrag = false;
+			zeigeFehlertext();
+		} catch (IllegalArgumentException ignore) {
+			_ausreichenderGeldbetrag = false;
+			zeigeFehlertext();
+		}
+		zeigeAusreichenderGeldbetragStatus();
+	}
 
-    /**
-     * Beendet den Bezahlvorgang mit Erfolg.
-     */
-    private void bezahlenErfolgreich()
-    {
-        _barzahlungErfolgreich = true;
-        _ui.verberge();
-    }
+	/**
+	 * Beendet den Bezahlvorgang mit Erfolg.
+	 */
+	private void bezahlenErfolgreich() {
+		_barzahlungErfolgreich = true;
+		_ui.verberge();
+	}
 
-    /**
-     * Bricht den Bezahlvorgang ohne Erfolg ab.
-     */
-    private void bezahlenNichtErfolgreich()
-    {
-        _barzahlungErfolgreich = false;
-        _ui.verberge();
-    }
+	/**
+	 * Bricht den Bezahlvorgang ohne Erfolg ab.
+	 */
+	private void bezahlenNichtErfolgreich() {
+		_barzahlungErfolgreich = false;
+		_ui.verberge();
+	}
 
-    /**
-     * Setzt die UI in einen sinnvollen Anfangszustand.
-     */
-    private void setzeUIAnfangsstatus()
-    {
-        zeigePreis();
-        loescheGezahltenBetrag();
-        zeigeRestbetrag(_preis);
-        zeigeAusreichenderGeldbetragStatus();
-    }
+	/**
+	 * Setzt die UI in einen sinnvollen Anfangszustand.
+	 */
+	private void setzeUIAnfangsstatus() {
+		zeigePreis();
+		loescheGezahltenBetrag();
+		zeigeRestbetrag(_preis);
+		zeigeAusreichenderGeldbetragStatus();
+	}
 
-    /**
-     * Löscht den gezahlten Betrag aus der UI.
-     */
-    private void loescheGezahltenBetrag()
-    {
-        _ui.getGezahltTextfield()
-            .setText("");
-    }
+	/**
+	 * Löscht den gezahlten Betrag aus der UI.
+	 */
+	private void loescheGezahltenBetrag() {
+		_ui.getGezahltTextfield().setText("");
+	}
 
-    /**
-     * Setzt die Statusanzeige der Gegeben- und Rückgabe-Textfelder abhängig
-     * davon, ob ein ausreichender Geldbetrag gegeben wurde.
-     * 
-     */
-    private void zeigeAusreichenderGeldbetragStatus()
-    {
-        _ui.getGeldErhaltenButton()
-            .setEnabled(_ausreichenderGeldbetrag);
-        _ui.markiereGezahltTextfield(_ausreichenderGeldbetrag);
-        _ui.markiereRestbetragTextfield(_ausreichenderGeldbetrag);
-    }
+	/**
+	 * Setzt die Statusanzeige der Gegeben- und Rückgabe-Textfelder abhängig
+	 * davon, ob ein ausreichender Geldbetrag gegeben wurde.
+	 * 
+	 */
+	private void zeigeAusreichenderGeldbetragStatus() {
+		_ui.getGeldErhaltenButton().setEnabled(_ausreichenderGeldbetrag);
+		_ui.markiereGezahltTextfield(_ausreichenderGeldbetrag);
+		_ui.markiereRestbetragTextfield(_ausreichenderGeldbetrag);
+	}
 
-    /**
-     * Setzt die Fehlerstatusanzeige der Gegeben- und Rückgabe-Textfelder.
-     * 
-     * @param fehler true, wenn die Felder als fehlerhaft markiert werden
-     *            sollen, sonst false.
-     */
-    private void zeigeFehlertext()
-    {
-        _ui.getRestbetragTextfield()
-            .setText(" Falsches Format ");
-    }
+	/**
+	 * Setzt die Fehlerstatusanzeige der Gegeben- und Rückgabe-Textfelder.
+	 * 
+	 * @param fehler
+	 *            true, wenn die Felder als fehlerhaft markiert werden sollen,
+	 *            sonst false.
+	 */
+	private void zeigeFehlertext() {
+		_ui.getRestbetragTextfield().setText(" Falsches Format ");
+	}
 
-    /**
-     * Setzt eine übergebene Differenz im Restbetrag-Textfeld
-     * 
-     * @param _preis2 ein eingegebener Betrag
-     */
-    private void zeigeRestbetrag(Eurobetrag _preis2)
-    {
-        _ui.getRestbetragTextfield()
-            .setText(_preis2 + "");
-    }
+	/**
+	 * Setzt eine übergebene Differenz im Restbetrag-Textfeld
+	 * 
+	 * @param _preis2
+	 *            ein eingegebener Betrag
+	 */
+	private void zeigeRestbetrag(Eurobetrag _preis2) {
+		_ui.getRestbetragTextfield().setText(_preis2 + "");
+	}
 
-    /**
-     * Setzt den Preis in der UI.
-     */
-    private void zeigePreis()
-    {
-        _ui.getPreisTextfield()
-            .setText(_preis + "");
-    }
+	/**
+	 * Setzt den Preis in der UI.
+	 */
+	private void zeigePreis() {
+		_ui.getPreisTextfield().setText(_preis + "");
+	}
 }
